@@ -16,3 +16,6 @@
     - name: beats_agents
       ansible.builtin.include_role:
         name: update-system
+
+
+# https://www.youtube.com/watch?v=XVRv1W3n94Y = | Install Elasticsearch, Logstash, Kibana, Filebeat Ubuntu
