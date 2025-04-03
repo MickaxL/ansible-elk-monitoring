@@ -1,0 +1,12 @@
+---
+- name: Update RedHat-based systems (RHEL, CentOS, Fedora)
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+    update_cache: true
+  become: true
+
+- name: Remove garbage packages of RedHat-based systems (RHEL, CentOS, Fedora)
+  ansible.builtin.dnf:
+    autoremove: true
+  become: true

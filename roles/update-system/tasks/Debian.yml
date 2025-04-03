@@ -1,0 +1,23 @@
+---
+- name: Update packages on Debian-based systems
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: safe
+  become: true
+
+- name: Autoremove unused packages (Debian)
+  ansible.builtin.apt:
+    autoremove: true
+    autoclean: true
+  become: true
+ 
+- name: Check if a reboot is required (Debian-based)
+  stat:
+    path: /var/run/reboot-required
+  register: debian_reboot_required
+  
+- name: Reboot the system if required
+  ansible.builtin.reboot:
+  when:  debian_reboot_required.stat.exists
+  become: true 
+    

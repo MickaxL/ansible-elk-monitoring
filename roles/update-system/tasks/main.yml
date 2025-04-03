@@ -1,0 +1,4 @@
+---
+- name: Include distribution-specific tasks
+  ansible.builtin.include_tasks:
+    file: "{{ ansible_os_family }}.yml"
