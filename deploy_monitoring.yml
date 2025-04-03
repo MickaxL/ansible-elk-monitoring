@@ -4,7 +4,15 @@
   become: yes
   gather_facts: yes
 
-  roles:
-    - elk_server
-    - beats_agents
+  tasks:
+    - name: update-system
+      ansible.builtin.include_role:
+        name: update-system
 
+    - name: elk_server
+      ansible.builtin.include_role:
+        name: update-system
+
+    - name: beats_agents
+      ansible.builtin.include_role:
+        name: update-system
