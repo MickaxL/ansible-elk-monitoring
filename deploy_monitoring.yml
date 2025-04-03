@@ -1,0 +1,10 @@
+---
+- name: deploy_monitoring_config
+  hosts: all
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - elk_server
+    - beats_agents
+
