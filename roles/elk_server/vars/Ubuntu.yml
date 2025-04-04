@@ -3,7 +3,14 @@ UbuntuServer_requirement_packages:
   - openjdk-11-jdk
   - elasticsearch
   - logstash
+  - kibana
+  - filebeat
 
 elasticsearch_config_path: /etc/elasticsearch/elasticsearch.yml
 elasticsearch_group: elasticsearch
 elasticsearch_owner: root
+
+kibana_config_path: /etc/kibana/kibana.yml
+kibana_owner: kibana
+kibana_group: kibana
+

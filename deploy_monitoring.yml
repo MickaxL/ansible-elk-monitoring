@@ -5,9 +5,9 @@
   gather_facts: yes
 
   tasks:
-   # - name: update-system
-     # ansible.builtin.include_role:
-      #  name: update-system
+    - name: update-system
+      ansible.builtin.include_role:
+        name: update-system
 
     - name: elk_server
       ansible.builtin.include_role:

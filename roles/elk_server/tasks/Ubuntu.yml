@@ -2,12 +2,6 @@
   ansible.builtin.include_vars:
     file: "{{ ansible_distribution }}.yml"
 
-- name: Install required packages for Ubuntu as main server
-  ansible.builtin.package:
-    name: "{{ UbuntuServer_requirement_packages }}"
-    state: present
-    update_cache: yes
-
 - name: ensure stack components can locate Java
   ansible.builtin.lineinfile:
     path: /etc/environment
@@ -33,11 +27,11 @@
   ansible.builtin.package:
     update_cache: yes
 
-- name: Enable and start Elasticsearch
-  ansible.builtin.systemd:
-    name: elasticsearch
-    enabled: yes
-    state: started
+- name: Install required packages for Ubuntu as main server
+  ansible.builtin.package:
+    name: "{{ UbuntuServer_requirement_packages }}"
+    state: present
+    update_cache: yes
 
 - name: Copy templated elasticsearch.yml
   template:
@@ -46,10 +40,21 @@
     owner: "{{ elasticsearch_owner }}"
     group: "{{ elasticsearch_group }}"
     mode: '0660'
-  notify: restart elasticsearch
 
-- name: Enable and start logstash
+- name: Copy templated kibana.yml
+  template:
+    src: kibana.yml.j2
+    dest: "{{ kibana_config_path }}"
+    owner: "{{ kibana_owner }}"
+    group: "{{ kibana_group }}"
+    mode: '0644'
+
+- name: Enable and start elasticsearch, logstash, kibana
   ansible.builtin.systemd:
-    name: logstash
+    name: "{{ item }}"
     enabled: yes
     state: started
+  loop:
+    - elasticsearch
+    - logstash
+    - kibana
