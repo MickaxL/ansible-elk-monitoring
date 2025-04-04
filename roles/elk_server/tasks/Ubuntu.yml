@@ -39,7 +39,7 @@
     dest: "{{ elasticsearch_config_path }}"
     owner: "{{ elasticsearch_owner }}"
     group: "{{ elasticsearch_group }}"
-    mode: '0660'
+    mode: '0644'
 
 - name: Copy templated kibana.yml
   template:
@@ -48,6 +48,25 @@
     owner: "{{ kibana_owner }}"
     group: "{{ kibana_group }}"
     mode: '0644'
+
+- name: Deploy Filebeat configuration
+  ansible.builtin.template:
+    src: filebeat.yml.j2
+    dest: /etc/filebeat/filebeat.yml
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Enable Filebeat system module
+  command: filebeat modules enable system
+  args:
+    creates: /etc/filebeat/modules.d/system.yml
+
+- name: Setup Filebeat dashboards and ingest pipelines
+  command: filebeat setup
+
+- name: Load Filebeat dashboards
+  command: filebeat setup --dashboards
 
 - name: Enable and start elasticsearch, logstash, kibana
   ansible.builtin.systemd:
@@ -58,3 +77,4 @@
     - elasticsearch
     - logstash
     - kibana
+    - filebeat

@@ -14,3 +14,5 @@ kibana_config_path: /etc/kibana/kibana.yml
 kibana_owner: kibana
 kibana_group: kibana
 
+elk_server_ip: 192.168.167.16
+

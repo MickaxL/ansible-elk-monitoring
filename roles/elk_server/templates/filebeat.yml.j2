@@ -1,0 +1,19 @@
+filebeat.modules:
+  - module: system
+    syslog:
+      enabled: true
+    auth:
+      enabled: true
+
+setup.kibana:
+  host: "http://{{ elk_server_ip }}:5601"
+
+output.elasticsearch:
+  hosts: ["http://{{ elk_server_ip }}:9200"]
+
+setup.template.settings:
+  index.number_of_shards: 1
+
+processors:
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
