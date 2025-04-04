@@ -2,6 +2,7 @@ UbuntuServer_requirement_packages:
   - apt-transport-https
   - openjdk-11-jdk
   - elasticsearch
+  - logstash
 
 elasticsearch_config_path: /etc/elasticsearch/elasticsearch.yml
 elasticsearch_group: elasticsearch

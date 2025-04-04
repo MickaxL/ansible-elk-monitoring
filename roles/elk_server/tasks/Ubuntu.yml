@@ -48,3 +48,8 @@
     mode: '0660'
   notify: restart elasticsearch
 
+- name: Enable and start logstash
+  ansible.builtin.systemd:
+    name: logstash
+    enabled: yes
+    state: started
