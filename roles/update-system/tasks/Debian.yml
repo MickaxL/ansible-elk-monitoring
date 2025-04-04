@@ -1,9 +1,11 @@
 ---
 - name: Update packages on Debian-based systems
   ansible.builtin.apt:
-    update_cache: true
-    upgrade: safe
-  become: true
+    update_cache: yes
+  retries: 5
+  delay: 15
+  register: apt_update
+  until: apt_update is succeeded
 
 - name: Autoremove unused packages (Debian)
   ansible.builtin.apt:

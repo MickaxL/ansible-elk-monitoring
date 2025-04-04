@@ -1,0 +1,50 @@
+- name: Include distribution-specific variables
+  ansible.builtin.include_vars:
+    file: "{{ ansible_distribution }}.yml"
+
+- name: Install required packages for Ubuntu as main server
+  ansible.builtin.package:
+    name: "{{ UbuntuServer_requirement_packages }}"
+    state: present
+    update_cache: yes
+
+- name: ensure stack components can locate Java
+  ansible.builtin.lineinfile:
+    path: /etc/environment
+    line: JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
+    create: yes
+
+- name: Source environment
+  shell: . /etc/environment
+
+- name: Download and install Elasticsearch GPG key
+  ansible.builtin.shell: |
+    curl -fsSL https://artifacts.elastic.co/GPG-KEY-elasticsearch | gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg
+  args:
+    creates: /usr/share/keyrings/elasticsearch-keyring.gpg
+
+- name: Add Elasticsearch APT repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main"
+    filename: elastic-8.x
+    state: present
+
+- name: Update APT cache
+  ansible.builtin.package:
+    update_cache: yes
+
+- name: Enable and start Elasticsearch
+  ansible.builtin.systemd:
+    name: elasticsearch
+    enabled: yes
+    state: started
+
+- name: Copy templated elasticsearch.yml
+  template:
+    src: elasticsearch.yml.j2
+    dest: "{{ elasticsearch_config_path }}"
+    owner: "{{ elasticsearch_owner }}"
+    group: "{{ elasticsearch_group }}"
+    mode: '0660'
+  notify: restart elasticsearch
+

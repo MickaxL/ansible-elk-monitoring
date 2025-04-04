@@ -5,17 +5,17 @@
   gather_facts: yes
 
   tasks:
-    - name: update-system
-      ansible.builtin.include_role:
-        name: update-system
+   # - name: update-system
+     # ansible.builtin.include_role:
+      #  name: update-system
 
     - name: elk_server
       ansible.builtin.include_role:
-        name: update-system
+        name: elk_server
 
     - name: beats_agents
       ansible.builtin.include_role:
-        name: update-system
+        name: beats_agents
 
 
 # https://www.youtube.com/watch?v=XVRv1W3n94Y = | Install Elasticsearch, Logstash, Kibana, Filebeat Ubuntu
