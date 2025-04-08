@@ -5,6 +5,7 @@ UbuntuServer_requirement_packages:
   - logstash
   - kibana
   - filebeat
+  - metricbeat
 
 elasticsearch_config_path: /etc/elasticsearch/elasticsearch.yml
 elasticsearch_group: elasticsearch

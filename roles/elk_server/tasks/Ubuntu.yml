@@ -57,6 +57,14 @@
     group: root
     mode: '0644'
 
+- name: Deploy metricbeat configuration
+  ansible.builtin.template:
+    src: metricbeat.yml.j2
+    dest: /etc/metricbeat/metricbeat.yml
+    owner: root
+    group: root
+    mode: '0644'
+
 - name: Enable Filebeat system module
   command: filebeat modules enable system
   args:
@@ -78,3 +86,4 @@
     - logstash
     - kibana
     - filebeat
+    - metricbeat
