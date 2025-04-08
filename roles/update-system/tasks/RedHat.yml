@@ -1,4 +1,12 @@
 ---
+- name: Gather installed packages facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: Ensure python3-libdnf5 is installed
+  when: "'python3-libdnf5' not in ansible_facts.packages"
+  ansible.builtin.command: sudo dnf install -y python3-libdnf5
+
 - name: Update RedHat-based systems (RHEL, CentOS, Fedora)
   ansible.builtin.dnf:
     name: "*"

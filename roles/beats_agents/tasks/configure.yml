@@ -1,0 +1,56 @@
+---
+- name: Deploy Filebeat config
+  ansible.builtin.template:
+    src: filebeat.yml.j2
+    dest: /etc/filebeat/filebeat.yml
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+
+- name: Deploy Metricbeat config
+  ansible.builtin.template:
+    src: metricbeat.yml.j2
+    dest: /etc/metricbeat/metricbeat.yml
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+
+- name: Enable and start Filebeat | Metricbeat
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    enabled: yes
+    state: started
+  loop:
+    - filebeat
+    - metricbeat
+  become: true
+
+- name: Enable Filebeat system module
+  command: filebeat modules enable system
+  args:
+    creates: /etc/filebeat/modules.d/system.yml
+  become: true
+
+- name: Setup Filebeat dashboards and ingest pipelines
+  command: filebeat setup
+  become: true
+
+- name: Load Filebeat dashboards
+  command: filebeat setup --dashboards
+  become: true
+
+- name: Enable Metricbeat system module
+  command: metricbeat modules enable system
+  args:
+    creates: /etc/metricbeat/modules.d/system.yml
+  become: true
+
+- name: Setup Metricbeat dashboards and ingest pipelines
+  command: metricbeat setup
+  become: true
+
+- name: Load Metricbeat dashboards
+  command: metricbeat setup --dashboards
+  become: true

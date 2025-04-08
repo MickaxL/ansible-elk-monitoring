@@ -1,0 +1,34 @@
+# =========================== Modules configuration ============================
+
+metricbeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+
+# ======================= Elasticsearch template setting =======================
+
+setup.template.settings:
+  index.number_of_shards: 1
+  index.codec: best_compression
+
+# ================================= Dashboards =================================
+
+setup.dashboards.enabled: true
+
+# =================================== Kibana ===================================
+
+setup.kibana:
+  host: "http://{{ elk_server_ip }}:5601"
+
+# ================================== Outputs ===================================
+
+output.elasticsearch:
+  hosts: ["http://{{ elk_server_ip }}:9200"]
+  preset: balanced
+
+# ================================= Processors =================================
+
+processors:
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
+  - add_kubernetes_metadata: ~

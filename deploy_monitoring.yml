@@ -5,17 +5,22 @@
   gather_facts: yes
 
   tasks:
-   # - name: update-system
-   #   ansible.builtin.include_role:
-   #     name: update-system
-
-    - name: elk_server
+    - name: update-system
       ansible.builtin.include_role:
-        name: elk_server
+        name: update-system
 
-    - name: beats_agents
-      ansible.builtin.include_role:
-        name: beats_agents
+- name: Deploy ELK stack on main server
+  hosts: elk_server
+  become: true
+  gather_facts: yes
+  roles:
+    - elk_server
 
+- name: Deploy Beats agents on ELK clients
+  hosts: elk_clients
+  become: true
+  gather_facts: yes
+  roles:
+    - beats_agents
 
 # https://www.youtube.com/watch?v=XVRv1W3n94Y = | Install Elasticsearch, Logstash, Kibana, Filebeat Ubuntu
