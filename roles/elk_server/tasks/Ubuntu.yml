@@ -57,25 +57,6 @@
     group: root
     mode: '0644'
 
-- name: Deploy metricbeat configuration
-  ansible.builtin.template:
-    src: metricbeat.yml.j2
-    dest: /etc/metricbeat/metricbeat.yml
-    owner: root
-    group: root
-    mode: '0644'
-
-- name: Enable Filebeat system module
-  command: filebeat modules enable system
-  args:
-    creates: /etc/filebeat/modules.d/system.yml
-
-- name: Setup Filebeat dashboards and ingest pipelines
-  command: filebeat setup
-
-- name: Load Filebeat dashboards
-  command: filebeat setup --dashboards
-
 - name: Enable and start elasticsearch, logstash, kibana
   ansible.builtin.systemd:
     name: "{{ item }}"
@@ -87,3 +68,18 @@
     - kibana
     - filebeat
     - metricbeat
+
+- name: Enable Filebeat system module
+  command: filebeat modules enable system
+  args:
+    creates: /etc/filebeat/modules.d/system.yml
+  become: true
+
+- name: Setup Filebeat dashboards and ingest pipelines
+  command: filebeat setup
+  become: true
+
+- name: Load Filebeat dashboards
+  command: filebeat setup --dashboards
+  become: true
+
