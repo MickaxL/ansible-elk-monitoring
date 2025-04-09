@@ -1,4 +1,5 @@
 ---
+
 - name: Deploy Filebeat config
   ansible.builtin.template:
     src: filebeat.yml.j2
