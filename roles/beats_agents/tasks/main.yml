@@ -1,13 +1,5 @@
 ---
-- name: Include Debian-specific tasks
-  ansible.builtin.include_tasks: Debian.yml
-  when: ansible_os_family == "Debian"
-
-- name: Include RedHat-specific tasks
-  ansible.builtin.include_tasks: RedHat.yml
-  when: ansible_os_family == "RedHat"
-
-- name: Deploy and enable Filebeat/Metricbeat
-  ansible.builtin.include_tasks: configure.yml
-
+- ansible.builtin.include_tasks:
+    file: "Ubuntu.yml"
+  when: ansible_distribution == "Ubuntu"
 

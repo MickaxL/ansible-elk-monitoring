@@ -1,4 +1,37 @@
 ---
+- name: Load Ubuntu variables
+  ansible.builtin.include_vars: Ubuntu.yml
+
+- name: Download and install Elasticsearch GPG key
+  ansible.builtin.shell: |
+    curl -fsSL https://artifacts.elastic.co/GPG-KEY-elasticsearch | gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg
+  args:
+    creates: /usr/share/keyrings/elasticsearch-keyring.gpg
+
+- name: Add Elasticsearch APT repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main"
+    filename: elastic-8.x
+    state: present
+
+- name: Update APT cache
+  ansible.builtin.package:
+    update_cache: yes
+
+- name: Install required packages for Ubuntu as Client
+  ansible.builtin.package:
+    name: "{{ UbuntuClient_requirement_packages }}"
+    state: present
+    update_cache: yes
+
+- name: Install Filebeat and Metricbeat
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - filebeat
+    - metricbeat
+  become: true
 
 - name: Deploy Filebeat config
   ansible.builtin.template:
@@ -9,6 +42,7 @@
     mode: '0644'
   become: true
 
+
 - name: Deploy Metricbeat config
   ansible.builtin.template:
     src: metricbeat.yml.j2
@@ -17,6 +51,7 @@
     group: root
     mode: '0644'
   become: true
+ 
 
 - name: Enable and start Filebeat | Metricbeat
   ansible.builtin.systemd:

@@ -1,0 +1,6 @@
+UbuntuClient_requirement_packages:
+  - apt-transport-https
+  - filebeat
+  - metricbeat
+
+elk_server_ip: 192.168.167.16
