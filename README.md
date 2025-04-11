@@ -4,7 +4,7 @@ This repository provides a complete Ansible automation to deploy and configure a
 
 ## Project Architecture
 
-```
+```bash
 ansible-elk-monitoring/
 ├── deploy_monitoring.yml           # Main playbook to launch the deployment
 ├── roles/
@@ -60,7 +60,7 @@ git clone https://github.com/your-username/ansible-elk-monitoring.git
 cd ansible-elk-monitoring
 ```
 
-2. **Edit your inventory**:
+2.**Edit your inventory**:
 
 ```ini
 [elk_server]
@@ -71,7 +71,7 @@ cd ansible-elk-monitoring
 192.168.167.32 ansible_user=mickael
 ```
 
-3. **Run the playbook**:
+3.**Run the playbook**:
 
 ```bash
 ansible-playbook -i inventory.ini deploy_monitoring.yml
@@ -81,11 +81,12 @@ ansible-playbook -i inventory.ini deploy_monitoring.yml
 
 After deployment, access Kibana at:
 
-```
+```bash
 http://192.168.167.16:5601
 ```
 
 You should see:
+
 - System logs in the [Filebeat System] dashboards
 - System metrics in the [Metricbeat System] dashboards
 
@@ -107,4 +108,3 @@ Mickael Paquet
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
